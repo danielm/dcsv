@@ -1,8 +1,16 @@
 [package]
-name = "rust-csv-print"
+name = "dcsv"
 version = "0.1.0"
 edition = "2021"
+authors = ["Daniel Morales <daniel85mg@gmail.com>"]
+description = "A simple app to work with CSV files"
+homepage = "https://daniel.uy/"
+repository = "https://github.com/danielm/dcsv"
+license = "GPL-2.0-or-later"
+keywords = ["rust", "csv"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = { version = "3.2.17", features = ["derive"] }
+csv = "1.1.6"

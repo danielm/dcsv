@@ -23,13 +23,13 @@ fn main() {
             Ok(mut reader) => {
                 if let Ok(headers) = reader.headers() {
                     // println!("{:?}", headers);
-                    if let Some(colIndex) = headers.iter().position(|r| r == args.column) {
+                    if let Some(col_index) = headers.iter().position(|r| r == args.column) {
                         // println!("Found header at index: {}", colIndex);
-                        // println!("{:?}", reader);
-
-                        for Ok(result) in reader.records() {
-                            if let Some(value) = result.get(colIndex) {
-                                println!("{:?}: {}", result.position(), value);
+                        while let Some(Ok(result)) = reader.records().next() {
+                            if let Some(value) = result.get(col_index) {
+                                println!("{:?}: {}", result.position().unwrap().line(), value);
+                            } else {
+                                println!("Failed to access value column");
                             }
                         }
                     } else {
@@ -43,8 +43,3 @@ fn main() {
     }
     
 }
-
-// fn print_column(reader: Reader, column: i32) 
-// {
-//     println!("we here: {}", column);
-// }

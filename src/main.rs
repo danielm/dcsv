@@ -9,25 +9,45 @@ struct Args {
    
    #[clap(short, long, value_parser)]
    column: String,
+
+   #[clap(short='n', long, action)]
+   line_number: bool,
+
+   // #[clap(short='h', long, action)]
+   // no_headers: bool,
+
+   #[clap(short, long, action)]
+   verbose: bool,
 }
 
 fn main() {
     let args = Args::parse();
 
-    // println!("We are going to open: {}, and look for {}", args.filename, args.column);
+    if args.verbose {
+        println!("----");
+        println!("* File: {}", args.path);
+        println!("* Header Column: {}", args.column);
+    }
 
     match ReaderBuilder::new()
         .delimiter(b',')
-        // .has_headers(false)
+        // .has_headers(args.has_headers)
         .from_path(args.path) {
             Ok(mut reader) => {
                 if let Ok(headers) = reader.headers() {
-                    // println!("{:?}", headers);
                     if let Some(col_index) = headers.iter().position(|r| r == args.column) {
-                        // println!("Found header at index: {}", colIndex);
+                        if args.verbose {
+                            println!("* Header found at column: {}", col_index + 1);
+                            println!("----");
+                        }
+                        // Output data
                         while let Some(Ok(result)) = reader.records().next() {
                             if let Some(value) = result.get(col_index) {
-                                println!("{:?}: {}", result.position().unwrap().line(), value);
+                                if args.line_number {
+                                    println!("{:?}: {}", result.position().unwrap().line(), value);
+                                } else {
+                                    println!("{}", value);
+                                }
                             } else {
                                 println!("Failed to access value column");
                             }

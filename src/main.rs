@@ -1,6 +1,5 @@
 use clap::Parser;
 use csv::{ReaderBuilder,Reader};
-
 use std::fs::File;
 
 #[derive(Parser, Debug)]
@@ -12,11 +11,17 @@ struct Args {
    #[clap(short, long, value_parser)]
    column: String,
 
-   #[clap(short='n', long, action)]
+   #[clap(short='l', long, action)]
    line_number: bool,
 
    #[clap(short, long, action)]
    verbose: bool,
+
+//    #[clap(short, long, value_parser)]
+//    seek: Option<u32>,
+
+//    #[clap(short, long, value_parser)]
+//    number: Option<u32>,
 }
 
 fn main() {
@@ -39,29 +44,25 @@ fn main() {
 
 fn process_csv(mut reader: Reader<File>, args: Args)
 {
-    if let Ok(headers) = reader.headers() {
-        if let Some(col_index) = headers.iter().position(|r| r == args.column) {
-            if args.verbose {
-                println!("* Header found at column: {}", col_index + 1);
-                println!("----");
+    let headers = reader.headers()
+        .expect("Cannot read CSV headers");
+
+    let col_index = headers.iter().position(|r| r == args.column)
+        .expect("Header not found");
+    if args.verbose {
+        println!("* Header found at column: {}", col_index + 1);
+        println!("----");
+    }
+
+    // Output data
+    while let Some(Ok(result)) = reader.records().next() {
+        if let Some(value) = result.get(col_index) {
+            if args.line_number {
+                println!("{:?}: {}", result.position().unwrap().line(), value);
+            } else {
+                println!("{}", value);
             }
-            // Output data
-            while let Some(Ok(result)) = reader.records().next() {
-                if let Some(value) = result.get(col_index) {
-                    if args.line_number {
-                        println!("{:?}: {}", result.position().unwrap().line(), value);
-                    } else {
-                        println!("{}", value);
-                    }
-                } else {
-                    println!("Failed to access column's value");
-                }
-            }
-        } else {
-            println!("Cannot find the requested column: '{}'", args.column);
         }
-    } else {
-        println!("Cannot read headers");
     }
 }
 

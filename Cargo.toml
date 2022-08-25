@@ -1,9 +1,9 @@
 [package]
 name = "dcsv"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2021"
 authors = ["Daniel Morales <daniel85mg@gmail.com>"]
-description = "A simple app to work with CSV files"
+description = "A simple app to print/fetch data from CSV files"
 homepage = "https://daniel.uy/"
 repository = "https://github.com/danielm/dcsv"
 license = "GPL-2.0-or-later"

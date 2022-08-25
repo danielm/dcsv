@@ -1,0 +1,14 @@
+ - [ ] Testing
+ - [ ] Better error handling
+ - [ ] CI / build
+ - [ ] Ignore empty values
+ - [ ] Or Default value for these
+ - [ ] Support no-headers CSV / this requires another param / sorta line column index
+ - [ ] Read from stdin
+ - [ ] Delimiter option
+ - [ ] Linebreak option
+ - [ ] Trim option
+ - [ ] Quote option
+ - [ ] Duble quote option
+ - [ ] Escape character opton
+ - [ ] comments character / ???
